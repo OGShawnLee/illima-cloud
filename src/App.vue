@@ -1,7 +1,7 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <HelloWorld />
+  <RouterView v-slot="{ Component }">
+    <Transition name="fade">
+      <Component :is="Component" />
+    </Transition>
+  </RouterView>
 </template>
