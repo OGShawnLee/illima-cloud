@@ -23,7 +23,7 @@ async function onSignIn() {
   });
 
   if (data.user) {
-    router.push('/capture');
+    router.push('/app/capture');
   }
 };
 </script>

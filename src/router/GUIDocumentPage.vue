@@ -1,43 +1,38 @@
 <script setup lang="ts">
 import GUIEditor from "../components/GUIEditor.vue";
-import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useDebounceFn } from "@vueuse/core";
-import { db } from '@db';
+import { DocumentDAO, type DocumentShape } from "@business/DocumentDAO";
 
-interface Document {
-  id: string;
-  title: string;
-  content: {};
-  updated_at: string;
-  created_at: string;
-}
-
-const route = useRouter();
-const document = ref<Document | null>(null);
+const route = useRoute();
+const document = ref<DocumentShape | null>(null);
 const content = ref<{} | null>(null);
 
 onMounted(() => {
   fetchDocument();
 });
+watch(() => route.params.id, fetchDocument, { immediate: true })
 
 async function fetchDocument() {
-  const { data, error } = await db.from('documents')
-    .select('*')
-    .eq('id', route.currentRoute.value.params.id)
-    .single();
+  if (typeof route.params.id !== 'string') {
+    console.error("Invalid document ID");
+    return;
+  }
 
-  if (!error) {
-    document.value = data as Document;
-    content.value = JSON.parse(document.value.content as string) as {};
+  const { data, error } = await DocumentDAO.getOne(route.params.id as string);
+
+  if (error) {
+    console.error("Unable to fetch document"); 
+  } else {
+    document.value = data as DocumentShape;
+    content.value = data.content;
   }
 }
 
 async function updateDocumentTitle(title: string) {
   if (document.value) {
-    const { error } = await db.from('documents')
-      .update({ title })
-      .eq('id', document.value.id);
+    const { error } = await DocumentDAO.updateOneTitle(document.value.id, title);
 
     if (error) {
       console.error("Unable to update title");
@@ -46,11 +41,8 @@ async function updateDocumentTitle(title: string) {
 }
 
 async function updateDocumentContent(content: string) {
-  console.log(content)
   if (document.value) {
-    const { error } = await db.from('documents')
-      .update({ content })
-      .eq('id', document.value.id);
+    const { error } = await DocumentDAO.updateOneContent(document.value.id, content);
 
     if (error) {
       console.error("Unable to update content");
@@ -69,16 +61,15 @@ function onTitleInput(e: Event) {
 
 <template>
   <main class="col-span-6 py-12">
-    <div class="max-w-xl mx-auto">
-      <h1 class="text-4xl tracking-tight outline-none focus:ring-0 text-white" contenteditable="true"
+    <article class="max-w-2xl mx-auto" :key="document?.id">
+      <h1 class="mb-12 text-2xl font-medium tracking-tight outline-none focus:ring-0 text-white transition-colors" contenteditable="true"
         @input="onTitleInput">
         {{ document?.title }}
       </h1>
-      <GUIEditor :content="content" @on-update="debouncedContentUpdate" />
-      {{ content }}
-    </div>
+      <GUIEditor v-if="document?.content" :content="document.content" @on-update="debouncedContentUpdate" />
+    </article>
   </main>
-  <aside class="col-span-3">
-
+  <aside class="col-span-3 border-l border-neutral-800">
+  
   </aside>
 </template>

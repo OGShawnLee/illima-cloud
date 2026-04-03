@@ -1,24 +1,11 @@
 <script setup lang="ts">
 import type { User } from '@supabase/supabase-js';
 import { onMounted, ref } from 'vue';
-import { db } from '../db';
+import { db } from '@db';
 import { useRouter } from 'vue-router';
+import { Lightbulb } from "lucide-vue-next";
+import { DocumentDAO, type DocumentSnapshot } from '@business/DocumentDAO';
 
-interface Capture {
-  id: number;
-  user_id: string;
-  content: string;
-  created_at: string;
-}
-
-interface DocumentSnapshot {
-  id: string;
-  title: string;
-  updated_at: string;
-  is_archived: boolean;
-}
-
-const captures = ref<Capture[]>([]);
 const documentCollection = ref<DocumentSnapshot[]>([]);
 const user = ref<User | null>(null);
 const router = useRouter()
@@ -28,25 +15,12 @@ onMounted(async () => {
   user.value = data.user;
 
   if (user.value) {
-    fetchCaptures();
     fetchDocumentCollection(user.value.id);
   }
 });
 
-async function fetchCaptures() {
-  const { data, error } = await db
-    .from('sparks')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (!error) captures.value = data || [];
-}
-
-async function fetchDocumentCollection(id: string) {
-  const { data, error } = await db.from('documents')
-    .select('id, title, updated_at, is_archived')
-    .eq('user_id', id)
-    .order('updated_at', { ascending: false });
+async function fetchDocumentCollection(idUser: string) {
+  const { data, error } = await DocumentDAO.getAll(idUser);
 
   if (!error) documentCollection.value = data || [];
 }
@@ -72,8 +46,9 @@ async function handleSignOut() {
           </div>
           <nav>
             <ul class="p-8">
-              <RouterLink to="/app/capture">
-                Capture
+              <RouterLink class="flex items-center gap-1.5 hover:text-white" active-class="text-amber-400" to="/app/capture">
+                <Lightbulb :size="20"/>
+                Captures
               </RouterLink>
             </ul>
             <div class="h-12 px-8 flex items-center border-b border-neutral-800">
@@ -83,7 +58,7 @@ async function handleSignOut() {
               <li class="min-h-10" v-for="doc in documentCollection" :key="doc.id">
                 <RouterLink class="w-full" :to="'/app/document/' + doc.id" v-slot="{ isActive }">
                   <div
-                    :class="['h-full px-4 flex items-center border-l-2 text-sm transition duration-300', isActive ? 'bg-neutral-800/25 border-amber-400 text-amber-400' : 'border-transparent hover:bg-neutral-800/15']">
+                    :class="['h-full py-4 px-4 flex items-center border-l-2 text-sm transition duration-300', isActive ? 'bg-neutral-800/25 border-amber-400 text-amber-400' : 'border-transparent hover:bg-neutral-800/15']">
                     {{ doc.title }}
                   </div>
                 </RouterLink>

@@ -13,7 +13,7 @@ export default defineConfig({
         presetWebFonts({
           provider: "fontshare",
           fonts: {
-            sora: "Sora",
+            sora: "Ranade",
             jet: "JetBrains Mono",
           }
         })
@@ -28,6 +28,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      "@business": fileURLToPath(new URL("./src/business", import.meta.url)),
       "@db": fileURLToPath(new URL("./src/db.ts", import.meta.url)),
     },
   },

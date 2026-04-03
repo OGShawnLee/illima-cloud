@@ -2,6 +2,7 @@
   "files": [],
     "compilerOptions": {
     "paths": {
+      "@business": ["./src/business/*"],
       "@db": ["./src/db.ts"]
     }
   },

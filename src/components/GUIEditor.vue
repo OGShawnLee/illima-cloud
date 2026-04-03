@@ -27,21 +27,18 @@ const editor = useEditor({
   content: props.content,
   extensions: [
     TipTap.Bold.configure({
-      HTMLAttributes: { class: "text-black dark:text-white" },
+      HTMLAttributes: { class: "font-medium text-white" },
     }),
     TipTap.BubbleMenuExtension,
     TipTap.BulletList.configure({
-      HTMLAttributes: { class: "list-disc mx-4 dark:text-gray-300" },
+      HTMLAttributes: { class: "list-disc mx-4" },
     }),
     TipTap.Blockquote.extend({
       content: "(paragraph)+",
     }).configure({
       HTMLAttributes: {
         class:
-          "mb-4 px-8 py-4 leading-loose transition-colors border-l-4 " +
-          "bg-[#FAFAFA] border-gray-100 border-l-black " + // Light mode
-          "dark:bg-white/5 dark:border-white/10 dark:border-l-white dark:text-gray-300 " + // Dark mode
-          "[&>p:last-child]:mb-0",
+          "mb-4 px-8 py-4 leading-loose bg-neutral-800/25 border-l-4 border-white [&>p:last-child]:mb-0",
       },
     }),
     TipTap.Document.extend({ content: "block+" }),
@@ -49,7 +46,7 @@ const editor = useEditor({
       levels: [2],
       HTMLAttributes: {
         class:
-          "text-2xl font-medium tracking-tight mt-8 mb-4 text-gray-900 dark:text-white transition-colors",
+          "text-xl tracking-tight mt-8 mb-4 text-white transition-colors",
       },
     }),
     TipTap.History,
@@ -58,11 +55,11 @@ const editor = useEditor({
       HTMLAttributes: { class: "[&>p]:px-0 [&>ol]:mx-4 [&>ul]:mx-4" },
     }),
     TipTap.OrderedList.configure({
-      HTMLAttributes: { class: "list-decimal mx-4 dark:text-gray-300" },
+      HTMLAttributes: { class: "list-decimal mx-4" },
     }),
     TipTap.Paragraph.configure({
       HTMLAttributes: {
-        class: "mb-4 leading-relaxed transition-colors text-gray-700 dark:text-gray-300",
+        class: "mb-4 leading-loose transition-colors",
       },
     }),
     TipTap.Placeholder.configure({
@@ -95,7 +92,7 @@ const editor = useEditor({
 <template>
   <div class="editor-container relative">
     <BubbleMenu v-if="editor" :editor="editor" :tippy-options="{ duration: 150 }"
-      class="flex items-center overflow-hidden rounded-lg shadow-xl p-1 gap-0.5 border transition-all duration-300 bg-white border-gray-200 shadow-gray-200/50 dark:bg-[#1A1A1A] dark:border-white/10 dark:shadow-none">
+      class="p-1 flex items-center gap-0.5 bg-neutral-800 border border-neutral-700 rounded-lg overflow-hidden transition-all duration-300">
       <GUIEditorButton title="Bold" :is-active="editor?.isActive('bold')"
         @click="editor?.chain().focus().toggleBold().run()">
         <Bold />
@@ -138,6 +135,10 @@ const editor = useEditor({
         @click="editor?.chain().focus().toggleBulletList().run()">
         <List />
       </GUIEditorButton>
+      <GUIEditorButton title="Ordered List" :is-active="editor?.isActive('orderedList')"
+        @click="editor?.chain().focus().toggleOrderedList().run()">
+        <ListOrdered />
+      </GUIEditorButton>
       <GUIEditorButton title="Quote" :is-active="editor?.isActive('blockquote')"
         @click="editor?.chain().focus().toggleBlockquote().run()">
         <MessageSquare />
@@ -154,7 +155,7 @@ p.is-empty:before {
   height: 0;
   pointer-events: none;
   content: attr(data-placeholder);
-  --uno: "text-gray-300 dark:text-gray-700 transition-colors";
+  --uno: "text-neutral-600 transition-colors";
 }
 
 /* Fix for the prose-invert default colors */

@@ -2,24 +2,16 @@
 import type { User } from '@supabase/supabase-js';
 import { onMounted, ref, computed } from 'vue';
 import { db } from '../db';
-import { useRouter } from 'vue-router';
+import { CaptureDAO, type CaptureShape } from '@business/CaptureDAO';
 
-interface Capture {
-  id: number;
-  user_id: string;
-  content: string;
-  created_at: string;
-}
-
-const captures = ref<Capture[]>([]);
+const captureCollection = ref<CaptureShape[]>([]);
 const user = ref<User | null>(null);
 const captureInput = ref('');
 const isSubmitting = ref(false);
-const router = useRouter()
 
 // Computed property to keep newest sparks at the top
 const sortedCaptures = computed(() => {
-  return [...captures.value].sort((a, b) =>
+  return [...captureCollection.value].sort((a, b) =>
     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
 });
@@ -29,58 +21,48 @@ onMounted(async () => {
   user.value = data.user;
 
   if (user.value) {
-    fetchCaptures();
+    fetchCaptures(user.value.id);
   }
 });
 
-async function fetchCaptures() {
-  const { data, error } = await db
-    .from('sparks')
-    .select('*')
-    .order('created_at', { ascending: false });
+async function fetchCaptures(idUser: string) {
+  const { data, error } = await CaptureDAO.getAll(idUser);
 
-  if (!error) captures.value = data || [];
+  if (error) {
+    console.error("Unable to fetch captures");
+  } else {
+    captureCollection.value = data || [];
+  }
 }
 
 async function createCapture() {
   if (!user.value || !captureInput.value.trim() || isSubmitting.value) return;
 
   isSubmitting.value = true;
-  const { data, error } = await db
-    .from('sparks')
-    .insert({
-      user_id: user.value.id,
-      content: captureInput.value.trim()
-    })
-    .select();
+  const { data, error } = await CaptureDAO.createOne(user.value.id, captureInput.value.trim());
 
   if (!error && data) {
-    captures.value.unshift(data[0]); // Add to top of local state
+    captureCollection.value.unshift(data[0]); // Add to top of local state
     captureInput.value = '';
   }
 
   isSubmitting.value = false;
 }
 
-async function deleteSpark(id: number) {
-  const { error } = await db.from('sparks').delete().eq('id', id);
+async function deleteSpark(id: string) {
+  const { error } = await CaptureDAO.deleteOne(id);
 
   if (!error) {
-    captures.value = captures.value.filter(capture => capture.id !== id);
+    captureCollection.value = captureCollection.value.filter(capture => capture.id !== id);
   }
-}
-
-async function handleSignOut() {
-  await db.auth.signOut();
-  router.push('/auth/sign-in');
 }
 </script>
 
 <template>
   <main class="col-span-6 py-12">
-    <div class="max-w-xl mx-auto grid gap-12">
+    <div class="max-w-2xl mx-auto grid gap-12">
       <div>
-        <h1 class="mb-8 uppercase text-white tracking-widest text-xs">New Spark</h1>
+        <h1 class="mb-8 uppercase text-white tracking-widest text-xs">New Capture</h1>
         <div class="grid gap-6">
           <textarea v-model="captureInput" placeholder="Capture a thought..."
             class="w-full min-h-32 bg-transparent border-b border-neutral-800 outline-none resize-none text-lg text-white placeholder:text-neutral-700 focus:border-amber-400"
