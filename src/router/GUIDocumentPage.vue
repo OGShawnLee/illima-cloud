@@ -78,14 +78,14 @@ function onTitleInput(e: Event) {
       </div>
     </header>
     <article class="max-w-lg mx-auto mt-20 xl:max-w-xl 2xl:max-w-2xl" :key="document?.id">
-      <h1 class="mb-12 text-2xl font-medium tracking-tight outline-none focus:ring-0 text-white transition-colors"
+      <h1 class="mb-12 text-3xl tracking-tight outline-none focus:ring-0 text-white transition-colors"
         contenteditable="true" @input="onTitleInput">
         {{ document?.title }}
       </h1>
       <GUIEditor v-if="document?.content" :content="document.content" @on-update="debouncedContentUpdate" />
     </article>
   </main>
-  <aside class="xl:col-span-3 p-8 border-l border-neutral-800">
+  <aside class="hidden p-8 border-l border-neutral-800 xl:(col-span-3 block)">
     <GUIDocumentCaptureSection v-if="document" :document="document" />
   </aside>
 </template>

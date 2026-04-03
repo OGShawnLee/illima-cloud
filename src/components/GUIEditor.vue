@@ -9,7 +9,8 @@ import {
   AlignJustify,
   AlignRight,
   Bold,
-  Heading,
+  Heading2,
+  Heading3,
   Italic,
   List,
   ListOrdered,
@@ -43,10 +44,10 @@ const editor = useEditor({
     }),
     TipTap.Document.extend({ content: "block+" }),
     TipTap.Heading.extend({ marks: "" }).configure({
-      levels: [2],
+      levels: [2, 3],
       HTMLAttributes: {
         class:
-          "text-xl tracking-tight mt-8 mb-4 text-white transition-colors",
+          "tip-tap-heading tracking-tight mt-8 mb-4 text-white transition-colors",
       },
     }),
     TipTap.History,
@@ -127,9 +128,13 @@ const editor = useEditor({
         <AlignJustify />
       </GUIEditorButton>
       <div class="w-[1px] h-4 bg-gray-200 dark:bg-white/10 mx-1"></div>
-      <GUIEditorButton title="Heading" :is-active="editor?.isActive('heading', { level: 2 })"
+      <GUIEditorButton title="Heading 2" :is-active="editor?.isActive('heading', { level: 2 })"
         @click="editor?.chain().focus().toggleHeading({ level: 2 }).run()">
-        <Heading />
+        <Heading2 />
+      </GUIEditorButton>
+      <GUIEditorButton title="Heading 3" :is-active="editor?.isActive('heading', { level: 3 })"
+        @click="editor?.chain().focus().toggleHeading({ level: 3 }).run()">
+        <Heading3 />
       </GUIEditorButton>
       <GUIEditorButton title="Bullet List" :is-active="editor?.isActive('bulletList')"
         @click="editor?.chain().focus().toggleBulletList().run()">
@@ -162,5 +167,12 @@ p.is-empty:before {
 .dark #tip-tap-editor {
   --tw-prose-body: theme("colors.gray.300");
   --tw-prose-headings: theme("colors.white");
+}
+
+h2.tip-tap-heading {
+  --uno: "text-2xl";
+}
+h3.tip-tap-heading {
+  --uno: "text-lg"
 }
 </style>
