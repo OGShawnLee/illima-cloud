@@ -29,6 +29,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@business": fileURLToPath(new URL("./src/business", import.meta.url)),
+      "@components": fileURLToPath(new URL("./src/components", import.meta.url)),
       "@db": fileURLToPath(new URL("./src/db.ts", import.meta.url)),
     },
   },

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { User } from '@supabase/supabase-js';
 import { onMounted, ref, computed } from 'vue';
-import { db } from '../db';
 import { CaptureDAO, type CaptureShape } from '@business/CaptureDAO';
+import { db } from '@db';
 
 const captureCollection = ref<CaptureShape[]>([]);
-const user = ref<User | null>(null);
 const captureInput = ref('');
 const isSubmitting = ref(false);
+const user = ref<User | null>(null);
 
 // Computed property to keep newest sparks at the top
 const sortedCaptures = computed(() => {
@@ -18,6 +18,7 @@ const sortedCaptures = computed(() => {
 
 onMounted(async () => {
   const { data } = await db.auth.getUser();
+
   user.value = data.user;
 
   if (user.value) {
@@ -42,7 +43,7 @@ async function createCapture() {
   const { data, error } = await CaptureDAO.createOne(user.value.id, captureInput.value.trim());
 
   if (!error && data) {
-    captureCollection.value.unshift(data[0]); // Add to top of local state
+    captureCollection.value.unshift(data); // Add to top of local state
     captureInput.value = '';
   }
 

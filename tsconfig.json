@@ -3,6 +3,7 @@
     "compilerOptions": {
     "paths": {
       "@business": ["./src/business/*"],
+      "@components": ["./src/components/*"],
       "@db": ["./src/db.ts"]
     }
   },

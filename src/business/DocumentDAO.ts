@@ -2,6 +2,7 @@ import { db } from "@db"
 
 export interface DocumentShape {
   id: string
+  user_id: string;
   name: string
   title: string;
   content: {},
@@ -13,6 +14,9 @@ export interface DocumentShape {
 export type DocumentSnapshot = Pick<DocumentShape, "id" | "title" | "updated_at" | "is_archived">; 
 
 export const DocumentDAO = {
+  async createOne(idUser: string) {
+    return db.from("documents").insert({ user_id: idUser, title: "Untitled Document", content: {} }).select("*").single();
+  },
   async getOne(id: string) {
     return db.from("documents").select("*").eq("id", id).single();
   },
@@ -25,4 +29,7 @@ export const DocumentDAO = {
   async updateOneTitle(id: string, title: string) {
     return db.from("documents").update({ title }).eq("id", id).single();
   },
+  async deleteOne(id: string) {
+    return db.from("documents").delete().eq("id", id).single();
+  }
 }
