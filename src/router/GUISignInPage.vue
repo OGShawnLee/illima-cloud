@@ -32,13 +32,13 @@ async function onSignIn() {
   <div class="min-h-screen flex flex-col justify-center">
     <div class="grid gap-12">
       <div class="relative w-fit mx-auto text-center">
-        <span class="text-xl font-light tracking-[1.25rem] -mr-[1.25rem] text-white uppercase">Illima</span>
-        <p class="mt-2 text-[10px] uppercase tracking-[0.3em] font-medium leading-relaxed">
-          Architect your thoughts
-        </p>
+        <span class="uppercase text-xl text-white font-light tracking-[1.25rem] -mr-[1.25rem]">Illima</span>
         <span class="absolute -top-1 -right-6 text-10px uppercase tracking-tight text-amber-400">
           Alpha
         </span>
+        <p class="mt-2 text-[10px] uppercase tracking-[0.3em] font-medium leading-relaxed">
+          Architect your thoughts
+        </p>
       </div>
       <form class="relative border border-neutral-800 p-8 py-12 sm:mx-auto sm:w-full sm:max-w-md grid gap-9"
         @submit.prevent="onSignIn">

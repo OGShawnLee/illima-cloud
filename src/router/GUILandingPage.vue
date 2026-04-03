@@ -1,21 +1,31 @@
+<script setup lang="ts">
+import GUILogo from '@components/GUILogo.vue';
+
+const features = [
+  {
+    title: "Cloud-Native",
+    description: "Instant persistence with Supabase. Your thoughts are synced across devices the moment they strike."
+  },
+  {
+    title: "Zen Architecture",
+    description: "A distraction-free environment inspired by Stoicism and minimalism. No notifications, no bloat."
+  },
+  {
+    title: "The Spark System",
+    description: "Capture wild thoughts and link them to documents instantly. A centralized vault for ephemeral insights."
+  }
+];
+</script>
 <template>
   <div>
     <nav class="sticky top-0 z-50 w-full backdrop-blur-md">
       <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div class="relative w-fit">
-          <span class="text-lg font-light tracking-[1.25rem] -mr-[1.25rem] text-white uppercase">Illima</span>
-          <span class="absolute -top-1 -right-12 text-10px uppercase tracking-tight text-amber-400">
-            Alpha
-          </span>
-        </div>
+        <GUILogo />
         <div class="flex items-center gap-8">
-          <RouterLink to="/auth/sign-in"
-            class="text-xs uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">
-            Sign In
-          </RouterLink>
           <RouterLink to="/auth/sign-up"
             class="px-6 py-2 bg-white text-black text-xs font-bold uppercase tracking-widest hover:bg-amber-400 transition-colors">
-            Initialize</RouterLink>
+            Sign Up
+          </RouterLink>
         </div>
       </div>
     </nav>
@@ -78,20 +88,3 @@
     </footer>
   </div>
 </template>
-
-<script setup lang="ts">
-const features = [
-  {
-    title: "Cloud-Native",
-    description: "Instant persistence with Supabase. Your thoughts are synced across devices the moment they strike."
-  },
-  {
-    title: "Zen Architecture",
-    description: "A distraction-free environment inspired by Stoicism and minimalism. No notifications, no bloat."
-  },
-  {
-    title: "The Spark System",
-    description: "Capture wild thoughts and link them to documents instantly. A centralized vault for ephemeral insights."
-  }
-];
-</script>

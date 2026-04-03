@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { User } from '@supabase/supabase-js';
+import GUILogo from '@components/GUILogo.vue';
 import { onMounted, ref } from 'vue';
 import { db } from '@db';
 import { useRouter } from 'vue-router';
@@ -50,19 +51,14 @@ async function handleSignOut() {
       <div class="sticky top-0 h-screen flex flex-col justify-between">
         <div>
           <div class="p-8">
-            <div class="relative w-fit">
-              <span class="uppercase text-lg text-white font-light tracking-[1.25rem] -mr-[1.25rem]">Illima</span>
-              <span class="absolute -top-1 -right-12 text-[10px] uppercase tracking-tight text-amber-400 font-mono">
-                Alpha
-              </span>
-            </div>
+            <GUILogo />
           </div>
           <nav>
             <ul class="p-8">
               <RouterLink class="flex items-center gap-1.5 hover:text-white" active-class="text-amber-400"
                 to="/app/capture">
                 <Lightbulb :size="20" />
-                Captures
+                Capture
               </RouterLink>
             </ul>
             <div class="h-12 px-8 flex items-center justify-between border-b border-neutral-800">
@@ -75,7 +71,8 @@ async function handleSignOut() {
                 <div
                   class="absolute -top-px -left-px w-1.5 h-1.5 border-t border-l border-amber-400 opacity-0 group-hover:opacity-100 transition-opacity">
                 </div>
-                <Plus :size="14" stroke-width="1.75" class="text-neutral-600 group-hover:text-amber-400 transition-colors" />
+                <Plus :size="14" stroke-width="1.75"
+                  class="text-neutral-600 group-hover:text-amber-400 transition-colors" />
               </button>
             </div>
             <ul class="p-8 grid gap-3">
