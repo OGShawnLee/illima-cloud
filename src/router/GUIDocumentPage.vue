@@ -85,7 +85,9 @@ function onTitleInput(e: Event) {
       <GUIEditor v-if="document?.content" :content="document.content" @on-update="debouncedContentUpdate" />
     </article>
   </main>
-  <aside class="hidden p-8 border-l border-neutral-800 xl:(col-span-3 block)">
-    <GUIDocumentCaptureSection v-if="document" :document="document" />
+  <aside class="hidden h-full p-8 border-l border-neutral-800 xl:(col-span-3 block)">
+    <div class="sticky top-8 h-screen">
+      <GUIDocumentCaptureSection v-if="document" :document="document" />
+    </div>
   </aside>
 </template>
