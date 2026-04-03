@@ -28,7 +28,7 @@ router.beforeEach(async (to) => {
   const { data } = await db.auth.getClaims();
 
   if ((to.path === "/auth/sign-in" || to.path === "/auth/sign-up") && data) {
-    return "/studio";
+    return "/app/capture";
   }
 
   if (to.path === "/studio" && (data === null || data === undefined)) {
