@@ -2,6 +2,7 @@ import Vue from '@vitejs/plugin-vue';
 import UnoCSS from 'unocss/vite';
 import { presetWind4, presetWebFonts, transformerDirectives, transformerVariantGroup } from "unocss"
 import { defineConfig } from 'vite';
+import { fileURLToPath } from 'url';
 
 export default defineConfig({
   plugins: [
@@ -12,7 +13,7 @@ export default defineConfig({
         presetWebFonts({
           provider: "fontshare",
           fonts: {
-            satoshi: "Satoshi",
+            sora: "Sora",
             jet: "JetBrains Mono",
           }
         })
@@ -25,5 +26,9 @@ export default defineConfig({
       ],
     })
   ],
-
+  resolve: {
+    alias: {
+      "@db": fileURLToPath(new URL("./src/db.ts", import.meta.url)),
+    },
+  },
 })

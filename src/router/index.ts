@@ -5,9 +5,20 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: "/", component: () => import("./GUILandingPage.vue") },
-    { path: "/capture", component: () => import("./GUICapturePage.vue") },
-    { path: "/studio", component: () => import("./GUIStudioPage.vue") },
-    { path: "/document/:id", component: () => import("./GUIDocumentPage.vue") },
+    {
+      path: "/app",
+      component: () => import("./GUIAppLayout.vue"),
+      children: [
+        {
+          path: "capture",
+          component: () => import("./GUICapturePage.vue")
+        },
+        {
+          path: "document/:id?",
+          component: () => import("./GUIDocumentPage.vue")
+        }
+      ]
+    },
     { path: "/auth/sign-in", component: () => import("./GUISignInPage.vue") },
     { path: "/auth/sign-up", component: () => import("./GUISignUpPage.vue") },
   ],

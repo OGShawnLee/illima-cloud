@@ -1,5 +1,10 @@
 {
   "files": [],
+    "compilerOptions": {
+    "paths": {
+      "@db": ["./src/db.ts"]
+    }
+  },
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
