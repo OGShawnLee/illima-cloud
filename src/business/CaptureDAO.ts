@@ -15,7 +15,7 @@ export const CaptureDAO = {
     return db.from("sparks").insert({ user_id: idUser, document_id: idDocument, content }).select("*").single();
   },
   async getAll(idUser: string) {
-    return db.from("sparks").select("*").eq("user_id", idUser).order("created_at", { ascending: false }) ;
+    return db.from("sparks").select("*").eq("user_id", idUser).is("document_id", null).order("created_at", { ascending: false }) ;
   },
   async getAllByDocument(idDocument: string) {
     return db.from("sparks").select("*").eq("document_id", idDocument).order("created_at", { ascending: false }) ;
