@@ -37,7 +37,7 @@ async function createCapture() {
   }
 
   if (!error && data) {
-    captureCollection.value.push(data);
+    captureCollection.value.unshift(data);
     captureInput.value = '';
   }
 
@@ -54,10 +54,10 @@ async function deleteSpark(id: string) {
 </script>
 
 <template>
-  <div class="grid gap-12">
-    <div>
-      <h1 class="mb-8 uppercase text-white tracking-widest text-xs">New Capture</h1>
-      <div class="grid gap-6">
+  <div class="h-screen flex flex-col bg-neutral-900 overflow-hidden">
+    <div class="shrink-0 bg-neutral-900 border-b border-neutral-800 z-10">
+      <h2 class="h-16 px-8 flex items-center uppercase text-xs text-white tracking-widest">New Capture</h2>
+      <div class="p-8 grid gap-6">
         <textarea v-model="captureInput" placeholder="Capture a thought..."
           class="w-full min-h-32 bg-transparent border-b border-neutral-800 outline-none resize-none text-lg text-white placeholder:text-neutral-700 focus:border-amber-400"
           @keydown.enter.prevent="createCapture"></textarea>
@@ -70,7 +70,7 @@ async function deleteSpark(id: string) {
         </div>
       </div>
     </div>
-    <div class="grid gap-12">
+    <div class="flex-1 overflow-y-auto p-8 grid gap-12">
       <div v-for="item in captureCollection" :key="item.id" class="grid gap-3 group">
         <p class="text-neutral-300 leading-relaxed">
           {{ item.content }}
@@ -79,7 +79,7 @@ async function deleteSpark(id: string) {
           <span class="text-xs uppercase font-jet transition-colors whitespace-nowrap">
             {{ new Date(item.created_at).toLocaleDateString().replace(/\//g, '.') }} // LOG_ENTRY
           </span>
-          <div class="h-px flex-1 bg-neutral-900 group-hover:bg-neutral-800 transition-colors"></div>
+          <div class="h-px flex-1 bg-neutral-800/30 group-hover:bg-neutral-800 transition-colors"></div>
           <button @click="deleteSpark(item.id)"
             class="cursor-pointer opacity-0 group-hover:opacity-100 text-xs hover:text-rose-400 uppercase font-jet tracking-tighter transition-all duration-300">
             TERMINATE_SPARK

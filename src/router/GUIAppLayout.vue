@@ -48,13 +48,13 @@ async function handleSignOut() {
 <template>
   <div class="h-screen grid grid-cols-12">
     <aside class="col-span-3 h-full flex flex-col gap-3 border-r border-neutral-800">
-      <div class="sticky top-0 h-screen flex flex-col justify-between">
-        <div>
-          <div class="p-8">
+      <div class="sticky top-0 h-screen">
+        <div class="h-screen flex flex-col overflow-hidden">
+          <div class="shrink-0 p-8 z-10">
             <GUILogo />
           </div>
           <nav>
-            <ul class="p-8">
+            <ul class="px-8 py-4">
               <RouterLink class="flex items-center gap-1.5 hover:text-white" active-class="text-amber-400"
                 to="/app/capture">
                 <Lightbulb :size="20" />
@@ -75,6 +75,8 @@ async function handleSignOut() {
                   class="text-neutral-600 group-hover:text-amber-400 transition-colors" />
               </button>
             </div>
+          </nav>
+          <nav class="flex-1 overflow-y-auto">
             <ul class="p-8 grid gap-3">
               <li class="min-h-10" v-for="doc in documentCollection" :key="doc.id">
                 <RouterLink class="w-full" :to="'/app/document/' + doc.id" v-slot="{ isActive }">
@@ -86,26 +88,26 @@ async function handleSignOut() {
               </li>
             </ul>
           </nav>
-        </div>
-        <div class="p-8 grid gap-3 border-t border-neutral-800">
-          <div class="flex items-center gap-3">
-            <div
-              class="w-12 h-12 flex-shrink-0 flex items-center justify-center border border-neutral-800 text-amber-400 text-xs font-bold uppercase">
-              {{ user?.user_metadata.name?.substring(0, 2) || '??' }}
+          <div class="p-8 grid gap-3 border-t border-neutral-800">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-12 h-12 flex-shrink-0 flex items-center justify-center border border-neutral-800 text-amber-400 text-xs font-bold uppercase">
+                {{ user?.user_metadata.name?.substring(0, 2) || '??' }}
+              </div>
+              <div class="flex flex-col min-w-0">
+                <span class="text-white">
+                  {{ user?.user_metadata.name || 'guest_user' }}
+                </span>
+                <span class="text-xs text-neutral-600">
+                  {{ user?.user_metadata.username || 'no_username' }}
+                </span>
+              </div>
             </div>
-            <div class="flex flex-col min-w-0">
-              <span class="text-white">
-                {{ user?.user_metadata.name || 'guest_user' }}
-              </span>
-              <span class="text-xs text-neutral-600">
-                {{ user?.user_metadata.username || 'no_username' }}
-              </span>
-            </div>
+            <button @click="handleSignOut"
+              class="h-10 border border-neutral-800 cursor-pointer uppercase font-jet text-xs tracking-widest hover:(text-rose-400 bg-rose-950/10 border-rose-400/10) transition-colors">
+              terminate_session
+            </button>
           </div>
-          <button @click="handleSignOut"
-            class="h-10 border border-neutral-800 cursor-pointer uppercase font-jet text-xs tracking-widest hover:(text-rose-400 bg-rose-950/10 border-rose-400/10) transition-colors">
-            terminate_session
-          </button>
         </div>
       </div>
     </aside>

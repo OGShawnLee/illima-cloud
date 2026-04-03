@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { User } from '@supabase/supabase-js';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref } from 'vue';
 import { CaptureDAO, type CaptureShape } from '@business/CaptureDAO';
 import { db } from '@db';
 
@@ -8,13 +8,6 @@ const captureCollection = ref<CaptureShape[]>([]);
 const captureInput = ref('');
 const isSubmitting = ref(false);
 const user = ref<User | null>(null);
-
-// Computed property to keep newest sparks at the top
-const sortedCaptures = computed(() => {
-  return [...captureCollection.value].sort((a, b) =>
-    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  );
-});
 
 onMounted(async () => {
   const { data } = await db.auth.getUser();
@@ -43,7 +36,7 @@ async function createCapture() {
   const { data, error } = await CaptureDAO.createOne(user.value.id, captureInput.value.trim());
 
   if (!error && data) {
-    captureCollection.value.unshift(data); // Add to top of local state
+    captureCollection.value.unshift(data);
     captureInput.value = '';
   }
 
@@ -60,7 +53,7 @@ async function deleteSpark(id: string) {
 </script>
 
 <template>
-  <main class="col-span-6 py-12">
+  <main class="col-span-9 py-12 2xl:col-span-6">
     <div class="max-w-2xl mx-auto grid gap-12">
       <div>
         <h1 class="mb-8 uppercase text-white tracking-widest text-xs">New Capture</h1>
@@ -82,7 +75,7 @@ async function deleteSpark(id: string) {
           <h2 class="uppercase text-neutral-500 tracking-widest text-[10px]">Timeline</h2>
         </div>
         <div class="grid gap-12">
-          <div v-for="item in sortedCaptures" :key="item.id" class="grid gap-3 group">
+          <div v-for="item in captureCollection" :key="item.id" class="grid gap-3 group">
             <p class="text-neutral-300 leading-relaxed">
               {{ item.content }}
             </p>

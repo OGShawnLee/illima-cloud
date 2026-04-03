@@ -2,7 +2,8 @@
 import GUIEditor from "@components/GUIEditor.vue";
 import GUIDocumentCaptureSection from "@components/GUIDocumentCaptureSection.vue";
 import { onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { Trash2 } from "lucide-vue-next";
 import { useDebounceFn } from "@vueuse/core";
 import { DocumentDAO, type DocumentShape } from "@business/DocumentDAO";
 
@@ -10,6 +11,7 @@ const route = useRoute();
 const document = ref<DocumentShape | null>(null);
 const content = ref<{} | null>(null);
 const headerRef = ref<HTMLElement | null>(null);
+const router = useRouter();
 
 onMounted(() => {
   fetchDocument();
@@ -52,6 +54,18 @@ async function updateDocumentContent(content: string) {
   }
 }
 
+async function handleDeleteDocument() {
+  if (document.value) {
+    const { error } = await DocumentDAO.deleteOne(document.value.id);
+
+    if (error) {
+      console.error("Unable to delete document");
+    } else {
+      router.push('/app/capture');
+    }
+  }
+}
+
 const debouncedTitleUpdate = useDebounceFn(updateDocumentTitle, 500);
 const debouncedContentUpdate = useDebounceFn(updateDocumentContent, 500);
 
@@ -76,6 +90,14 @@ function onTitleInput(e: Event) {
           </span>
         </div>
       </div>
+      <button
+        class="group relative w-6 h-6 border border-neutral-800 flex items-center justify-center hover:border-rose-400 transition-colors cursor-pointer"
+        title="Delete Document" @click="handleDeleteDocument">
+        <div
+          class="absolute -top-px -left-px w-1.5 h-1.5 border-t border-l border-rose-400 opacity-0 group-hover:opacity-100 transition-opacity">
+        </div>
+        <Trash2 :size="14" stroke-width="1.75" class="text-neutral-600 group-hover:text-rose-400 transition-colors" />
+      </button>
     </header>
     <article class="max-w-lg mx-auto mt-20 xl:max-w-xl 2xl:max-w-2xl" :key="document?.id">
       <h1 class="mb-12 text-3xl tracking-tight outline-none focus:ring-0 text-white transition-colors"
@@ -85,8 +107,8 @@ function onTitleInput(e: Event) {
       <GUIEditor v-if="document?.content" :content="document.content" @on-update="debouncedContentUpdate" />
     </article>
   </main>
-  <aside class="hidden h-full p-8 border-l border-neutral-800 xl:(col-span-3 block)">
-    <div class="sticky top-8 h-screen">
+  <aside class="hidden h-full border-l border-neutral-800 xl:(col-span-3 block)">
+    <div class="sticky top-0 h-screen">
       <GUIDocumentCaptureSection v-if="document" :document="document" />
     </div>
   </aside>
