@@ -88,23 +88,30 @@ async function handleSignOut() {
               </li>
             </ul>
           </nav>
-          <div class="p-8 grid gap-3 border-t border-neutral-800">
+          <div class="p-8 grid gap-3 border-t border-neutral-800 relative group">
+            <div
+              class="absolute top-3 right-8 flex items-center gap-1.5 opacity-30 group-hover:opacity-60 transition-opacity">
+              <span class="w-1 h-1 bg-amber-400 rounded-full animate-pulse"></span>
+              <span class="font-jet text-[9px] text-neutral-500 uppercase tracking-tighter">
+                ILLIMA_V1.0.5-ALPHA
+              </span>
+            </div>
             <div class="flex items-center gap-3">
               <div
                 class="w-12 h-12 flex-shrink-0 flex items-center justify-center border border-neutral-800 text-amber-400 text-xs font-bold uppercase">
                 {{ user?.user_metadata.name?.substring(0, 2) || '??' }}
               </div>
               <div class="flex flex-col min-w-0">
-                <span class="text-white">
+                <span class="text-white truncate">
                   {{ user?.user_metadata.name || 'guest_user' }}
                 </span>
-                <span class="text-xs text-neutral-600">
+                <span class="text-xs text-neutral-600 truncate">
                   {{ user?.user_metadata.username || 'no_username' }}
                 </span>
               </div>
             </div>
             <button @click="handleSignOut"
-              class="h-10 border border-neutral-800 cursor-pointer uppercase font-jet text-xs tracking-widest hover:(text-rose-400 bg-rose-950/10 border-rose-400/10) transition-colors">
+              class="h-10 border border-neutral-800 cursor-pointer uppercase font-jet text-xs tracking-widest hover:(text-rose-400 bg-rose-950/10 border-rose-400/30) transition-all">
               terminate_session
             </button>
           </div>
