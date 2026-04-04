@@ -34,9 +34,7 @@ async function createCapture() {
 
   if (error) {
     console.log("Unable to create capture", error);
-  }
-
-  if (!error && data) {
+  } else if (data) {
     captureCollection.value.unshift(data);
     captureInput.value = '';
   }
@@ -70,8 +68,8 @@ async function deleteSpark(id: string) {
         </div>
       </div>
     </div>
-    <div class="flex-1 overflow-y-auto p-8 grid gap-12">
-      <div v-for="item in captureCollection" :key="item.id" class="grid gap-3 group">
+    <div class="flex-1 overflow-y-auto p-8 grid content-start gap-12">
+      <div v-for="item in captureCollection" :key="item.id" class="h-fit grid gap-3 group">
         <p class="text-neutral-300 leading-relaxed">
           {{ item.content }}
         </p>

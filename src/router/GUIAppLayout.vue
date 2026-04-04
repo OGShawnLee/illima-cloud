@@ -55,7 +55,7 @@ async function handleSignOut() {
           </div>
           <nav>
             <ul class="px-8 py-4">
-              <RouterLink class="flex items-center gap-1.5 hover:text-white" active-class="text-amber-400"
+              <RouterLink class="flex items-center gap-3 hover:text-white" active-class="text-amber-400"
                 to="/app/capture">
                 <Lightbulb :size="20" />
                 Capture
@@ -93,7 +93,7 @@ async function handleSignOut() {
               class="absolute top-3 right-8 flex items-center gap-1.5 opacity-30 group-hover:opacity-60 transition-opacity">
               <span class="w-1 h-1 bg-amber-400 rounded-full animate-pulse"></span>
               <span class="font-jet text-[9px] text-neutral-500 uppercase tracking-tighter">
-                ILLIMA_V1.0.5-ALPHA
+                ILLIMA_V1.0.6-ALPHA
               </span>
             </div>
             <div class="flex items-center gap-3">
