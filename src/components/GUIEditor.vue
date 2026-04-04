@@ -51,7 +51,9 @@ const editor = useEditor({
       },
     }),
     TipTap.History,
-    TipTap.Italic,
+    TipTap.Italic.configure({
+      HTMLAttributes: { class: "italic text-neutral-300" },
+    }),
     TipTap.ListItem.configure({
       HTMLAttributes: { class: "[&>p]:px-0 [&>ol]:mx-4 [&>ul]:mx-4" },
     }),
@@ -71,11 +73,13 @@ const editor = useEditor({
         return "What do you have in mind?";
       },
     }),
-    TipTap.Strike,
+    TipTap.Strike.configure({
+      HTMLAttributes: { class: "text-neutral-300" },
+    }),
     TipTap.Text,
     TipTap.TextAlign.configure({ types: ["paragraph"] }),
     TipTap.Underline.configure({
-      HTMLAttributes: { class: "underline-offset-3" },
+      HTMLAttributes: { class: "text-neutral-300 underline-offset-3" },
     }),
   ],
   editorProps: {
