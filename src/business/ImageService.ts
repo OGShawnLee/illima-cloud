@@ -1,5 +1,4 @@
 import { db } from "@db";
-import type { DocumentType, NodeType } from "@tiptap/core";
 
 /**
  * Genera un nombre de archivo único para almacenamiento en Supabase.
