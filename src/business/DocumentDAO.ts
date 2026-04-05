@@ -1,4 +1,3 @@
-import { FunctionRegion } from "@supabase/supabase-js";
 import { db } from "@db"
 
 export interface DocumentShape {
@@ -31,6 +30,6 @@ export const DocumentDAO = {
     return db.from("documents").update({ title }).eq("id", id).single();
   },
   async deleteOne(id: string) {
-    return db.functions.invoke("delete-document", { body: { "document_id": id }, region: FunctionRegion.UsEast1 });
+    return db.functions.invoke("delete-document", { body: { "document_id": id } });
   }
 }
