@@ -18,8 +18,10 @@ import {
   Strikethrough,
   Underline,
 } from "lucide-vue-next";
+import { ImageService } from "@business/ImageService";
 
 const props = defineProps<{
+  idUser: string;
   content: {} | undefined | null;
 }>();
 const emit = defineEmits(["onUpdate"]);
@@ -43,6 +45,59 @@ const editor = useEditor({
       },
     }),
     TipTap.Document.extend({ content: "block+" }),
+    TipTap.FileHandler.configure({
+      allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+      onDrop: (currentEditor, files, pos) => {
+        files.forEach((file) => {
+          const fileReader = new FileReader();
+
+          fileReader.readAsDataURL(file)
+          fileReader.onload = async () => {
+            if (fileReader.result === null) return;
+
+            const { data } = await ImageService.uploadImage(file, props.idUser);
+
+            if (data) {
+              currentEditor
+                .chain()
+                .insertContentAt(pos, {
+                  type: 'image',
+                  attrs: {
+                    src: data.publicUrl,
+                  },
+                })
+                .focus()
+                .run();
+            } else console.log("Unable to upload image");
+          }
+        })
+      },
+      onPaste: (currentEditor, files) => {
+        files.forEach((file) => {
+          const fileReader = new FileReader();
+
+          fileReader.readAsDataURL(file)
+          fileReader.onload = async () => {
+            if (fileReader.result === null) return;
+
+            const { data } = await ImageService.uploadImage(file, props.idUser);
+
+            if (data) {
+              currentEditor
+                .chain()
+                .insertContentAt(currentEditor.state.selection.anchor, {
+                  type: 'image',
+                  attrs: {
+                    src: data.publicUrl,
+                  },
+                })
+                .focus()
+                .run();
+            } else console.log("Unable to upload image");
+          }
+        })
+      },
+    }),
     TipTap.Heading.extend({ marks: "" }).configure({
       levels: [2, 3],
       HTMLAttributes: {
@@ -53,6 +108,9 @@ const editor = useEditor({
     TipTap.History,
     TipTap.Italic.configure({
       HTMLAttributes: { class: "italic text-neutral-300" },
+    }),
+    TipTap.Image.configure({
+      HTMLAttributes: { class: "rounded-lg my-4" },
     }),
     TipTap.ListItem.configure({
       HTMLAttributes: { class: "[&>p]:px-0 [&>ol]:mx-4 [&>ul]:mx-4" },
@@ -91,6 +149,19 @@ const editor = useEditor({
   onUpdate: ({ editor }) => {
     emit("onUpdate", editor.getJSON());
   },
+  async onDelete(e) {
+    if ("node" in e && e.node.type.name === 'image') {
+      const src = e.node.attrs.src;
+      
+      if (typeof src !== "string") return;
+
+      const result = await ImageService.deleteImage(src);
+
+      if (result && result.error) {
+        console.log("Unable to delete image");
+      }
+    }
+  }
 });
 </script>
 
@@ -176,6 +247,7 @@ p.is-empty:before {
 h2.tip-tap-heading {
   --uno: "text-2xl";
 }
+
 h3.tip-tap-heading {
   --uno: "text-lg"
 }

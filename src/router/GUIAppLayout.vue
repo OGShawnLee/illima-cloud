@@ -93,7 +93,7 @@ async function handleSignOut() {
               class="absolute top-3 right-8 flex items-center gap-1.5 opacity-30 group-hover:opacity-60 transition-opacity">
               <span class="w-1 h-1 bg-amber-400 rounded-full animate-pulse"></span>
               <span class="font-jet text-[9px] text-neutral-500 uppercase tracking-tighter">
-                ILLIMA_V1.0.6-ALPHA
+                ILLIMA_V1.0.7-ALPHA
               </span>
             </div>
             <div class="flex items-center gap-3">

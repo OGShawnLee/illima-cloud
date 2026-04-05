@@ -56,11 +56,12 @@ async function updateDocumentContent(content: string) {
 
 async function handleDeleteDocument() {
   if (document.value) {
-    const { error } = await DocumentDAO.deleteOne(document.value.id);
+    const { data, error } = await DocumentDAO.deleteOne(document.value.id);
 
     if (error) {
-      console.error("Unable to delete document");
+      console.error("Unable to delete document", error);
     } else {
+      console.log(data);
       router.push('/app/capture');
     }
   }
@@ -104,7 +105,8 @@ function onTitleInput(e: Event) {
         contenteditable="true" @input="onTitleInput">
         {{ document?.title }}
       </h1>
-      <GUIEditor v-if="document?.content" :content="document.content" @on-update="debouncedContentUpdate" />
+      <GUIEditor v-if="document?.content" :content="document.content" :id-user="document.user_id"
+        @on-update="debouncedContentUpdate" />
     </article>
   </main>
   <aside class="hidden h-full border-l border-neutral-800 xl:(col-span-3 block)">
